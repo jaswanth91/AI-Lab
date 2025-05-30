@@ -1,0 +1,161 @@
+1)BFS
+
+       
+from collections import deque
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': ['F'],
+    'F': []
+}
+start_node='A'
+queue=deque([start_node])
+visited=set([start_node])
+while queue:
+    node=queue.popleft()
+    print(node)
+    for neighbor in graph[node]:
+        if neighbor not in visited:
+            visited.add(neighbor)
+            queue.append(neighbor)
+
+    
+2)DFS
+
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': ['F'],
+    'F': []
+}
+start_node = 'A'
+stack = [start_node]
+visited = set([start_node])
+print("DFS:")
+while stack:
+    node = stack.pop()
+    print(node) 
+    for neighbor in reversed(graph[node]):  
+        if neighbor not in visited:
+            visited.add(neighbor)
+            stack.append(neighbor)
+     
+3)WATER JUG PROBLEM
+
+jug1_capacity = 2
+jug2_capacity = 4
+jug1 = 0
+jug2 = 0
+target = 2
+while jug1 != target and jug2 != target:
+    if jug2 == 0:
+        jug2 = jug2_capacity
+        print("Fill Jug2 →", f"Jug1 = {jug1}, Jug2 = {jug2}")
+    elif jug1 < jug1_capacity:
+        space = jug1_capacity - jug1
+        poured = min(jug2, space)
+        jug1 += poured
+        jug2 -= poured
+        print("Pour Jug2 to Jug1 →", f"Jug1 = {jug1}, Jug2 = {jug2}")
+    else:
+        jug1 = 0
+        print("Empty Jug1 →", f"Jug1 = {jug1}, Jug2 = {jug2}")
+print("\n Goal Reached →", f"Jug1 = {jug1}, Jug2 = {jug2}")
+
+4)ALPHA-BETA PURNING
+
+game_tree = [
+    [3, 5, 2, 9],  
+    [6, 1, 8, 4],  
+    [7, 2, 5, 3]  
+]
+alpha = float('-inf')
+beta = float('inf')
+for level in game_tree:
+    for value in level:
+        if value > alpha:
+            alpha = value  
+        if alpha >= beta:
+            break  
+    if alpha >= beta:
+        break  
+print("Optimal value:", alpha)
+
+5)TRAVELLING SALES MAN
+
+import itertools
+d=[[0,10,15,20],[10,0,35,25],[15,35,0,30],[20,25,30,0]]
+n=4
+cities=[1,2,3]
+min_cost=999999
+best_order=[]
+for p in itertools.permutations(cities):
+    path=[0]+list(p)+[0]
+    cost=0
+    cost+=d[path[0]][path[1]]
+    cost+=d[path[1]][path[2]]
+    cost+=d[path[2]][path[3]]
+    cost+=d[path[3]][path[4]]
+    if cost<min_cost:
+        min_cost=cost
+        best_order=path
+print("Best path:",best_order)
+print("Min cost:",min_cost)
+
+
+6)CRYPT ARTHEMATIC
+
+import itertools
+letters='TWOFUR'
+digits=range(10)
+for p in itertools.permutations(digits,6):
+    t,w,o,f,u,r=p
+    if t==0 or f==0:
+        continue
+    two=t*100+w*10+o
+    four=f*1000+o*100+u*10+r
+    if two+two==four:
+        print("TWO:",two)
+        print("FOUR:",four)
+        break
+
+7)MIN-MAX ALGORITHM
+
+tree = {
+    'A': ['B', 'C','D'],
+    'B': [3, 5],
+    'C': [2, 9],
+    'D':[5,8]
+}
+min_B = min(tree['B'])  
+min_C = min(tree['C'])  
+min_D=min(tree['D'])
+max_A = max(min_B, min_C,min_D)  
+print("The best score is:", max_A)
+
+
+8)GRAPH CLORING
+
+
+
+neighbours = {'A': ['B', 'C'], 'B': ['A', 'D'], 'C': ['A', 'D'], 'D': ['B', 'C']}
+colors = ['RED', 'GREEN', 'BLUE']
+found_solution = False
+
+for A_color in colors:
+    if found_solution:
+        break
+    for B_color in colors:
+        if A_color != B_color:
+            for C_color in colors:
+                if A_color != C_color:
+                    for D_color in colors:
+                        if B_color != D_color and C_color != D_color:
+                            print("solution:")
+                            print(f"A --> {A_color}, B --> {B_color}, C --> {C_color}, D --> {D_color}")
+                            found_solution = True
+                            break
