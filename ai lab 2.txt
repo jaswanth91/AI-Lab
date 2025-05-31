@@ -1,0 +1,96 @@
+Crypt arithmetic
+
+import itertools
+
+def solve():
+    for perm in itertools.permutations(range(10), 8):
+        s, e, n, d, m, o, r, y = perm
+        if s == 0 or m == 0: continue
+        send = 1000*s + 100*e + 10*n + d
+        more = 1000*m + 100*o + 10*r + e
+        money = 10000*m + 1000*o + 100*n + 10*e + y
+        if send + more == money:
+            print(f"SEND: {send}, MORE: {more}, MONEY: {money}")
+            return
+
+solve()
+
+
+
+def is_valid(state, country, color, neighbors):
+    return all(state.get(n) != color for n in neighbors[country])
+
+def solve(state, countries, colors, neighbors):
+    if len(state) == len(countries): return state
+    c = next(c for c in countries if c not in state)
+    for color in colors:
+        if is_valid(state, c, color, neighbors):
+            state[c] = color
+            res = solve(state, countries, colors, neighbors)
+            if res: return res
+            del state[c]
+    return None
+
+neighbors = {'A': ['B','C'], 'B': ['A','C'], 'C': ['A','B']}
+colors = ['Red', 'Green', 'Blue']
+print(solve({}, list(neighbors.keys()), colors, neighbors))
+
+
+
+
+
+
+
+def vacuum(env, pos):
+    for _ in range(len(env)):
+        if env[pos] == 'dirty':
+            print(f"Cleaned at {pos}")
+            env[pos] = 'clean'
+        else:
+            print(f"{pos} already clean")
+        pos = 'B' if pos == 'A' else 'A'
+
+# Initial environment: Room A is dirty, Room B is clean
+environment = {'A': 'dirty', 'B': 'clean'}
+vacuum(environment, 'A')
+
+
+
+def minimax(node, depth, maximizing, tree):
+    if depth == 0 or node not in tree:
+        return node  # assume leaf is a number
+    if maximizing:
+        return max(minimax(c, depth-1, False, tree) for c in tree[node])
+    else:
+        return min(minimax(c, depth-1, True, tree) for c in tree[node])
+
+# Example game tree
+tree = {
+    'A': ['B','C'],
+    'B': [3, 5],
+    'C': [2, 9]
+}
+
+print(minimax('A', 2, True, tree))
+
+
+
+def ab(node, d, a, b, maxP, tree):
+    if d == 0 or node not in tree: return node
+    if maxP:
+        v = float('-inf')
+        for c in tree[node]:
+            v = max(v, ab(c, d-1, a, b, 0, tree))
+            a = max(a, v)
+            if b <= a: break
+        return v
+    else:
+        v = float('inf')
+        for c in tree[node]:
+            v = min(v, ab(c, d-1, a, b, 1, tree))
+            b = min(b, v)
+            if b <= a: break
+        return v
+
+tree = {'A':['B','C'],'B':[3,5],'C':[6,9]}
+print(ab('A',2,-1e9,1e9,1,tree))
